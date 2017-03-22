@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<PowerMenu version="1" frameRate="60" resDensity="480" extraResources="sw720-den320::0.667,sw1536-den320::0.933,sw1440-den640::1.222" extraScales="sw720-den320:0.667,sw1536-den320:0.933,sw1440-den640:1.222" scaleByDensity="true">
+<PowerMenu version="2" frameRate="60" resDensity="480" extraResources="sw720-den320::0.667,sw1536-den320::0.933,sw1440-den640::1.222" extraScales="sw720-den320:0.667,sw1536-den320:0.933,sw1440-den640:1.222" scaleByDensity="true">
     <ExternalCommands>
         <!-- press Back in first view -->
-        <Trigger action="finish" condition="not(#reboot_dialog.visibility+#recovery_dialog.visibility+#fastboot_dialog.visibility+#shutdown_dialog.visibility)*not(#in_finish_progress)">
+        <Trigger action="finish" condition="not(#reboot_dialog.visibility+#shutdown_dialog.visibility+#recovery_dialog.visibility+#fastboot_dialog.visibility)*not(#in_finish_progress)">
             <VariableCommand name="in_finish_progress" expression="1" />
             <VariableCommand name="btn_flag" expression="0" />
             <VariableCommand name="inout_flag" expression="0" />
@@ -11,7 +11,7 @@
             <ExternCommand command="dismiss" delay="600"/>
         </Trigger>
         <!-- press Back in alert dialog -->
-        <Trigger action="finish" condition="(#reboot_dialog.visibility+#recovery_dialog.visibility+#fastboot_dialog.visibility+#shutdown_dialog.visibility)*not(#in_finish_progress)">
+        <Trigger action="finish" condition="(#reboot_dialog.visibility+#shutdown_dialog.visibility+#recovery_dialog.visibility+#fastboot_dialog.visibility)*not(#in_finish_progress)">
             <VariableCommand name="in_finish_progress" expression="1"/>
             <VariableCommand name="in_finish_progress" expression="0" delay="600" />
             <VariableCommand name="dialog_btn_flag" expression="0"/>
@@ -19,15 +19,15 @@
             <Command target="reboot_dialog.visibility" value="false" delay="600" condition="#reboot_dialog.visibility"/>
             <Command target="reboot_btn.visibility" value="true" delay="600" condition="#reboot_dialog.visibility"/>
             <VariableCommand name="reboot_label_flag" expression="0" condition="#reboot_dialog.visibility"/>
-			<Command target="recovery_dialog.visibility" value="false" delay="600" condition="#recovery_dialog.visibility"/>
-            <Command target="recovery_btn.visibility" value="true" delay="600" condition="#recovery_dialog.visibility"/>
-            <VariableCommand name="recovery_label_flag" expression="0" condition="#recovery_dialog.visibility"/>
-	        <Command target="fastboot_dialog.visibility" value="false" delay="600" condition="#fastboot_dialog.visibility"/>
-            <Command target="fastboot_btn.visibility" value="true" delay="600" condition="#fastboot_dialog.visibility"/>
-            <VariableCommand name="fastboot_label_flag" expression="0" condition="#fastboot_dialog.visibility"/>
             <Command target="shutdown_dialog.visibility" value="false" delay="600" condition="#shutdown_dialog.visibility"/>
             <Command target="shutdown_btn.visibility" value="true" delay="600" condition="#shutdown_dialog.visibility"/>
             <VariableCommand name="shutdown_label_flag" expression="0" condition="#shutdown_dialog.visibility"/>
+            <Command target="recovery_dialog.visibility" value="false" delay="600" condition="#recovery_dialog.visibility"/>
+            <Command target="recovery_btn.visibility" value="true" delay="600" condition="#recovery_dialog.visibility"/>
+            <VariableCommand name="recovery_label_flag" expression="0" condition="#recovery_dialog.visibility"/>
+            <Command target="fastboot_dialog.visibility" value="false" delay="600" condition="#fastboot_dialog.visibility"/>
+            <Command target="fastboot_btn.visibility" value="true" delay="600" condition="#fastboot_dialog.visibility"/>
+            <VariableCommand name="fastboot_label_flag" expression="0" condition="#fastboot_dialog.visibility"/>
             <VariableCommand name="inout_flag" expression="1" />
             <Command target="ani_timer_inout.animation" value="play" />
             <VariableCommand name="enter_flag" expression="0" />
@@ -35,10 +35,9 @@
         </Trigger>
     </ExternalCommands>
     <Var name="lx" expression="#view_width/2-190" />
-	<Var name="rx" expression="#view_width/2+190" />
-    <Var name="uy" expression="#view_height/2-400" />
-    <Var name="dy" expression="#view_height/2-40" />
-	<Var name="ny" expression="#view_height/2+320" />
+    <Var name="uy" expression="#view_height/2-260" />
+    <Var name="rx" expression="#view_width/2+190" />
+    <Var name="dy" expression="#view_height/2+180" />
     <Var name="confirm_y" expression="#view_height/2" />
     <Var name="confirm_label_y" expression="#confirm_y+272" />
     <Var name="label_space" expression="169" />
@@ -48,9 +47,9 @@
     <Var name="big_circle_r" expression="148" />
     <!-- 1: show alert label  0: show first view label -->
     <Var name="reboot_label_flag" expression="1" const="true" />
-	<Var name="recovery_label_flag" expression="1" const="true" />
-    <Var name="fastboot_label_flag" expression="1" const="true" />
     <Var name="shutdown_label_flag" expression="1" const="true" />
+    <Var name="recovery_label_flag" expression="1" const="true" />
+    <Var name="fastboot_label_flag" expression="1" const="true" />
     <!-- 1: fly in  0: fly out -->
     <Var name="inout_flag" expression="1" const="true" />
     <!-- enter or exit alert dialog -->
@@ -156,9 +155,44 @@
             <AniFrame value="0" time="1000000000000" />
         </VariableAnimation>
     </Var>
+    <Button name="blank_area" w="#view_width" h="#view_height" contentDescriptionExp="@label_blank">
+        <Triggers>
+            <!-- in first view -->
+            <Trigger action="up" condition="not(#reboot_dialog.visibility+#shutdown_dialog.visibility+#recovery_dialog.visibility+#fastboot_dialog.visibility)*not(#in_finish_progress)">
+                <VariableCommand name="in_finish_progress" expression="1" />
+                <VariableCommand name="btn_flag" expression="0" />
+                <VariableCommand name="inout_flag" expression="0" />
+                <Command target="ani_timer_inout.animation" value="play" />
+                <ExternCommand command="dismiss" delay="600"/>
+            </Trigger>
+            <!-- in alert dialog -->
+            <Trigger action="down" condition="(#reboot_dialog.visibility+#shutdown_dialog.visibility+#recovery_dialog.visibility+#fastboot_dialog.visibility)*not(#in_finish_progress)">
+                <VariableCommand name="in_finish_progress" expression="1"/>
+                <VariableCommand name="in_finish_progress" expression="0" delay="600" />
+                <VariableCommand name="dialog_btn_flag" expression="0"/>
+                <VariableCommand name="btn_flag" expression="1" delay="600" />
+                <Command target="reboot_dialog.visibility" value="false" delay="600" condition="#reboot_dialog.visibility"/>
+                <Command target="reboot_btn.visibility" value="true" delay="600" condition="#reboot_dialog.visibility"/>
+                <VariableCommand name="reboot_label_flag" expression="0" condition="#reboot_dialog.visibility"/>
+                <Command target="shutdown_dialog.visibility" value="false" delay="600" condition="#shutdown_dialog.visibility"/>
+                <Command target="shutdown_btn.visibility" value="true" delay="600" condition="#shutdown_dialog.visibility"/>
+                <VariableCommand name="shutdown_label_flag" expression="0" condition="#shutdown_dialog.visibility"/>
+            <Command target="recovery_dialog.visibility" value="false" delay="600" condition="#recovery_dialog.visibility"/>
+            <Command target="recovery_btn.visibility" value="true" delay="600" condition="#recovery_dialog.visibility"/>
+            <VariableCommand name="recovery_label_flag" expression="0" condition="#recovery_dialog.visibility"/>
+            <Command target="fastboot_dialog.visibility" value="false" delay="600" condition="#fastboot_dialog.visibility"/>
+            <Command target="fastboot_btn.visibility" value="true" delay="600" condition="#fastboot_dialog.visibility"/>
+            <VariableCommand name="fastboot_label_flag" expression="0" condition="#fastboot_dialog.visibility"/>
+                <VariableCommand name="inout_flag" expression="1" />
+                <Command target="ani_timer_inout.animation" value="play" />
+                <VariableCommand name="enter_flag" expression="0" />
+                <Command target="ani_timer_enter.animation" value="play" />
+            </Trigger>
+        </Triggers>
+    </Button>
     <!-- airplane mode -->
     <Group x="-#pos_offset_x*#ani_factor_inout" y="-#pos_offset_y*#ani_factor_inout">
-        <Button x="#lx-#circle_r" y="#uy-#circle_r" w="#btn_flag*#circle_r*2" h="#circle_r*2" contentDescriptionExp="@label_airplane_mode">
+        <Button x="#lx-#circle_r" y="#uy-#circle_r" w="#btn_flag*#circle_r*2" h="#circle_r*2" contentDescriptionExp="@label_airplane_mode" interceptTouch="true">
             <Normal>
                 <Circle x="#lx" y="#uy" r="#circle_r" strokeColor="#4cffffff" fillColor="#00ffffff" scale="#ani_scale_flightmode" weight="2" strokeAlign="inner" />
             </Normal>
@@ -199,7 +233,7 @@
     </Group>
     <!-- silent mode -->
     <Group x="#pos_offset_x*#ani_factor_inout" y="-#pos_offset_y*#ani_factor_inout">
-        <Button x="#rx-#circle_r" y="#uy-#circle_r" w="#btn_flag*#circle_r*2" h="#circle_r*2" contentDescriptionExp="@label_silent_mode">
+        <Button x="#rx-#circle_r" y="#uy-#circle_r" w="#btn_flag*#circle_r*2" h="#circle_r*2" contentDescriptionExp="@label_silent_mode" interceptTouch="true">
             <Normal>
                 <Circle x="#rx" y="#uy" r="#circle_r" strokeColor="#4cffffff" fillColor="#00ffffff" scale="#ani_scale_ringmode" weight="2" strokeAlign="inner" />
             </Normal>
@@ -243,7 +277,7 @@
     </Group>
     <!-- reboot -->
     <Group name="reboot_btn" x="-#pos_offset_x*#ani_factor_inout" y="#pos_offset_y*#ani_factor_inout">
-        <Button x="#lx-#circle_r" y="#dy-#circle_r" w="#btn_flag*#circle_r*2" h="#circle_r*2" contentDescriptionExp="@label_reboot">
+        <Button x="#lx-#circle_r" y="#dy-#circle_r" w="#btn_flag*#circle_r*2" h="#circle_r*2" contentDescriptionExp="@label_reboot" interceptTouch="true">
             <Normal>
                 <Circle x="#lx" y="#dy" r="#circle_r" strokeColor="#4cffffff" fillColor="#00ffffff" weight="2" strokeAlign="inner" />
             </Normal>
@@ -275,7 +309,7 @@
     </Group>
     <!-- shutdown -->
     <Group name="shutdown_btn" x="#pos_offset_x*#ani_factor_inout" y="#pos_offset_y*#ani_factor_inout">
-        <Button x="#rx-#circle_r" y="#dy-#circle_r" w="#btn_flag*#circle_r*2" h="#circle_r*2" contentDescriptionExp="@label_shutdown">
+        <Button x="#rx-#circle_r" y="#dy-#circle_r" w="#btn_flag*#circle_r*2" h="#circle_r*2" contentDescriptionExp="@label_shutdown" interceptTouch="true">
             <Normal>
                 <Circle x="#rx" y="#dy" r="#circle_r" strokeColor="#4cffffff" fillColor="#00ffffff" weight="2" strokeAlign="inner" />
             </Normal>
@@ -371,7 +405,7 @@
     </Group>
     <!-- reboot alert dialog -->
     <Group name="reboot_dialog" visibility="false">
-        <Button x="#view_width/2-#big_circle_r+(#lx-#view_width/2)*#ani_factor_enter" y="#confirm_y-#big_circle_r+(#dy-#confirm_y)*#ani_factor_enter" w="lt(#ani_factor_enter,0.2)*#big_circle_r*2" h="#big_circle_r*2" contentDescriptionExp="@label_alert_reboot">
+        <Button x="#view_width/2-#big_circle_r+(#lx-#view_width/2)*#ani_factor_enter" y="#confirm_y-#big_circle_r+(#dy-#confirm_y)*#ani_factor_enter" w="lt(#ani_factor_enter,0.2)*#big_circle_r*2" h="#big_circle_r*2" contentDescriptionExp="@label_alert_reboot" interceptTouch="true">
             <Normal>
                 <Circle x="#view_width/2+(#lx-#view_width/2)*#ani_factor_enter" y="#confirm_y+(#dy-#confirm_y)*#ani_factor_enter" r="#big_circle_r" scale="(1-0.29*#ani_factor_enter)*#ani_gone_dialogicon" strokeColor="#4cffffff" fillColor="#00ffffff" weight="2" strokeAlign="inner" />
             </Normal>
@@ -391,7 +425,6 @@
                     <Command target="ani_gone_dialogicon.animation" value="play" />
                     <Command target="ani_gone_dialogtext.animation" value="play" delay="100" />
                     <Command target="ani_gone_dialogcancel.animation" value="play" delay="200" />
-                    <ExternCommand command="dismiss" delay="700" />
                     <ExternCommand command="reboot" delay="700" />  <!-- TODO 700- to make sure reboot can be received -->
                 </Trigger>
             </Triggers>
@@ -400,7 +433,7 @@
     </Group>
     <!-- shutdown alert dialog -->
     <Group name="shutdown_dialog" visibility="false">
-        <Button x="#view_width/2-#big_circle_r+(#rx-#view_width/2)*#ani_factor_enter" y="#confirm_y-#big_circle_r+(#dy-#confirm_y)*#ani_factor_enter" w="lt(#ani_factor_enter,0.2)*#big_circle_r*2" h="#big_circle_r*2" contentDescriptionExp="@label_alert_shutdown">
+        <Button x="#view_width/2-#big_circle_r+(#rx-#view_width/2)*#ani_factor_enter" y="#confirm_y-#big_circle_r+(#dy-#confirm_y)*#ani_factor_enter" w="lt(#ani_factor_enter,0.2)*#big_circle_r*2" h="#big_circle_r*2" contentDescriptionExp="@label_alert_shutdown" interceptTouch="true">
             <Normal>
                 <Circle x="#view_width/2+(#rx-#view_width/2)*#ani_factor_enter" y="#confirm_y+(#dy-#confirm_y)*#ani_factor_enter" r="#big_circle_r" scale="(1-0.29*#ani_factor_enter)*#ani_gone_dialogicon" strokeColor="#4cffffff" fillColor="#00ffffff" weight="2" strokeAlign="inner" />
             </Normal>
@@ -420,12 +453,15 @@
                     <Command target="ani_gone_dialogicon.animation" value="play" />
                     <Command target="ani_gone_dialogtext.animation" value="play" delay="100" />
                     <Command target="ani_gone_dialogcancel.animation" value="play" delay="200" />
-                    <ExternCommand command="dismiss" delay="700" />
                     <ExternCommand command="shutdown" delay="700" />
                 </Trigger>
             </Triggers>
         </Button>
         <Text name="shutdown_confirm_label" x="#view_width/2+(#rx-#view_width/2)*#ani_factor_enter" y="#confirm_label_y+(#dy+#label_space-#confirm_label_y)*#ani_factor_enter" color="#99ffffff" size="40" pivotX="#shutdown_confirm_label.text_width/2" pivotY="#shutdown_confirm_label.text_height/2" scale="(1-0.11*#ani_factor_enter)*#ani_gone_dialogtext" align="center" alignV="center" textExp="ifelse(#shutdown_label_flag,@label_alert_shutdown,@label_shutdown)" />
+
+        <Text name="shutdown_label" x="#view_width/2" y="#view_height-100" w="#view_width-20" multiLine="true" color="#80ffffff" size="36" alpha="255*(1-#ani_factor_enter)" alignH="center" alignV="bottom" textExp="@shutdown_info" />
+
+
     </Group>
 	<!-- recovery alert dialog -->
     <Group name="recovery_dialog" visibility="false">
@@ -485,39 +521,20 @@
         </Button>
         <Text name="fastboot_confirm_label" x="#view_width/2+(#rx-#view_width/2)*#ani_factor_enter" y="#confirm_label_y+(#ny+#label_space-#confirm_label_y)*#ani_factor_enter" color="#99ffffff" size="40" pivotX="#fastboot_confirm_label.text_width/2" pivotY="#fastboot_confirm_label.text_height/2" scale="(1-0.11*#ani_factor_enter)*#ani_gone_dialogtext" align="center" alignV="center" textExp="ifelse(#fastboot_label_flag,@label_alert_fastboot,@label_fastboot)" />
     </Group>
-    <Button name="blank_area" w="#view_width" h="#view_height">
+    <!-- India version Panic Button feature -->
+    <Button x="#view_width/2-100" y="#view_height-280" w="200" h="100" visibility="#show_emergency">
+        <Normal>
+            <Text x="#view_width/2" y="#view_height-263" text="@label_emergency_call" align="center" size="36" color="#99ffffff" />
+        </Normal>
+        <Pressed >
+            <Text x="#view_width/2" y="#view_height-263" text="@label_emergency_call" align="center" size="36" color="#ffffffff" />
+        </Pressed>
         <Triggers>
-            <!-- in first view -->
-            <Trigger action="down" condition="not(#reboot_dialog.visibility+#recovery_dialog.visibility+#fastboot_dialog.visibility+#shutdown_dialog.visibility)*not(#in_finish_progress)">
-                <VariableCommand name="in_finish_progress" expression="1" />
-                <VariableCommand name="btn_flag" expression="0" />
-                <VariableCommand name="inout_flag" expression="0" />
-                <Command target="ani_timer_inout.animation" value="play" />
-                <ExternCommand command="dismiss" delay="600"/>
-            </Trigger>
-            <!-- in alert dialog -->
-            <Trigger action="down" condition="(#reboot_dialog.visibility+#recovery_dialog.visibility+#fastboot_dialog.visibility+#shutdown_dialog.visibility)*not(#in_finish_progress)">
-                <VariableCommand name="in_finish_progress" expression="1"/>
-                <VariableCommand name="in_finish_progress" expression="0" delay="600" />
-                <VariableCommand name="dialog_btn_flag" expression="0"/>
-                <VariableCommand name="btn_flag" expression="1" delay="600" />
-                <Command target="reboot_dialog.visibility" value="false" delay="600" condition="#reboot_dialog.visibility"/>
-                <Command target="reboot_btn.visibility" value="true" delay="600" condition="#reboot_dialog.visibility"/>
-                <VariableCommand name="reboot_label_flag" expression="0" condition="#reboot_dialog.visibility"/>				
-				<Command target="recovery_dialog.visibility" value="false" delay="600" condition="#recovery_dialog.visibility"/>
-                <Command target="recovery_btn.visibility" value="true" delay="600" condition="#recovery_dialog.visibility"/>
-                <VariableCommand name="recovery_label_flag" expression="0" condition="#recovery_dialog.visibility"/>
-				<Command target="fastboot_dialog.visibility" value="false" delay="600" condition="#fastboot_dialog.visibility"/>
-                <Command target="fastboot_btn.visibility" value="true" delay="600" condition="#fastboot_dialog.visibility"/>
-                <VariableCommand name="fastboot_label_flag" expression="0" condition="#fastboot_dialog.visibility"/>				
-                <Command target="shutdown_dialog.visibility" value="false" delay="600" condition="#shutdown_dialog.visibility"/>
-                <Command target="shutdown_btn.visibility" value="true" delay="600" condition="#shutdown_dialog.visibility"/>
-                <VariableCommand name="shutdown_label_flag" expression="0" condition="#shutdown_dialog.visibility"/>
-                <VariableCommand name="inout_flag" expression="1" />
-                <Command target="ani_timer_inout.animation" value="play" />
-                <VariableCommand name="enter_flag" expression="0" />
-                <Command target="ani_timer_enter.animation" value="play" />
+            <Trigger action="up">
+                <IntentCommand action="android.intent.action.CALL_EMERGENCY" uriExp="'tel:112'"/>
+                <ExternCommand command="unlock" delay="50"/>
             </Trigger>
         </Triggers>
     </Button>
+
 </PowerMenu>
