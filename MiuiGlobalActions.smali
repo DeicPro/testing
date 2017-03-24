@@ -124,7 +124,7 @@
 
     .line 125
     :cond_3
-    const-string v0, recovery
+    const-string v0, "recovery"
 
     invoke-virtual {v0, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 
@@ -134,13 +134,13 @@
 
     :try_start_1
     # invokes: Lcom/android/internal/policy/impl/MiuiGlobalActions;->getPowerManager()Landroid/os/IPowerManager;
-    invoke-static {}, Lcom/android/internal/policy/impl/MiuiGlobalActions;->access00()Landroid/os/IPowerManager;
+    invoke-static {}, Lcom/android/internal/policy/impl/MiuiGlobalActions;->access$100()Landroid/os/IPowerManager;
 
     move-result-object v0
 
     const/4 v1, 0x0
 
-    const-string v2, recovery
+    const-string v2, "recovery"
 
     const/4 v3, 0x0
 
@@ -156,7 +156,7 @@
     goto :goto_0
 
     :cond_4
-    const-string v0, bootloader
+    const-string v0, "bootloader"
 
     invoke-virtual {v0, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 
@@ -166,13 +166,13 @@
 
     :try_start_2
     # invokes: Lcom/android/internal/policy/impl/MiuiGlobalActions;->getPowerManager()Landroid/os/IPowerManager;
-    invoke-static {}, Lcom/android/internal/policy/impl/MiuiGlobalActions;->access00()Landroid/os/IPowerManager;
+    invoke-static {}, Lcom/android/internal/policy/impl/MiuiGlobalActions;->access$100()Landroid/os/IPowerManager;
 
     move-result-object v0
 
     const/4 v1, 0x0
 
-    const-string v2, bootloader
+    const-string v2, "bootloader"
 
     const/4 v3, 0x0
 
